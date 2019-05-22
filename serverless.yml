@@ -1,0 +1,24 @@
+service:
+  name: serverless-epg-api
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-dynamodb-local
+
+package:
+  exclude:
+    - coverage/**
+    - .circleci/**
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - http:
+          method: get
+          path: hello
