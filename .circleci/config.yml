@@ -23,6 +23,8 @@ jobs:
           command: |
             sudo npm i -g serverless
             npm i
+            which serverless
+            which sls
 
       # run tests
       - run: 
