@@ -14,6 +14,7 @@ package:
 provider:
   name: aws
   runtime: nodejs8.10
+  region: eu-west-2
   deploymentBucket:
     name: api.pencheza.com
 
