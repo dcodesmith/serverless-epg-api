@@ -29,10 +29,10 @@ jobs:
           name: Run unit tests with code coverage
           command: npm t
 
-      # deploy app            
-      # - run:
-      #     name: Deploy application 
-      #     command: sls deploy -v
+      # deploy app
+      - run:
+          name: Deploy application
+          command: sls deploy -v
 
       - save_cache:
           paths:
