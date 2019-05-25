@@ -4,7 +4,7 @@ service:
 plugins:
   - serverless-offline
   - serverless-webpack
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
 
 package:
   exclude:
@@ -15,6 +15,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-west-2
+  stackName: serverless-epg-api-${self:provider.stage}
   deploymentBucket:
     name: api.pencheza.com
 
