@@ -23,6 +23,8 @@ jobs:
           command: |
             sudo npm i -g serverless
             npm i
+            ls -l /home/circleci/
+            ls -l /home/circleci/serverless-epg-api
 
       # run tests
       - run: 
