@@ -16,7 +16,7 @@ export const hello = (event, _context, callback): void => {
   callback(null, response);
 };
 
-export const hi = (event, _context, callback): void => {
+export const hi = (_event, _context, callback): void => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({ hi: 'Just saying hi!' })
