@@ -23,15 +23,15 @@ jobs:
           command: |
             sudo npm i -g serverless
             npm i
-            ls -l /home/circleci/
-            ls -l /home/circleci/serverless-epg-api
 
-      # run tests
       - run: 
           name: Run unit tests with code coverage
           command: npm t
 
-      # deploy app
+      - run:
+          name: Remove service
+          command: sls remove
+
       - run:
           name: Deploy application
           command: sls deploy -v
