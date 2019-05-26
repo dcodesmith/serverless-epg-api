@@ -28,9 +28,9 @@ jobs:
           name: Run unit tests with code coverage
           command: npm t
 
-      # - run:
-      #     name: Remove service
-      #     command: sls remove
+      - run:
+          name: Remove service
+          command: sls remove
 
       - run:
           name: Deploy application
