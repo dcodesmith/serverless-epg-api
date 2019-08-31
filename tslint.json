@@ -1,5 +1,4 @@
 {
-  "rulesDirectory": "./src",
   "extends": [
     "tslint:latest",
     "tslint-blueprint",
