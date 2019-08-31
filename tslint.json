@@ -1,4 +1,5 @@
 {
+  "rulesDirectory": "./src",
   "extends": [
     "tslint:latest",
     "tslint-blueprint",
@@ -6,5 +7,6 @@
   ],
   "rules": {
     "object-literal-sort-keys": false,
+    "ordered-imports": false
   }
 }

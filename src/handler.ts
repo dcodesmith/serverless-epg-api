@@ -1,34 +1,34 @@
 import { APIGatewayEvent, Handler } from 'aws-lambda';
 import {
   OK,
-  CREATED,
+  CREATED
   // NOT_FOUND,
   // BAD_REQUEST,
   // NO_CONTENT
 } from 'http-status';
 
-// tslint:disable-next-line:no-submodule-imports
-import 'source-map-support/register';
+// tslint:disable variable-name no-shadowed-variable no-submodule-imports
 
-export const response = (fulfillmentText: any, statusCode: number): any => {
-  return {
-    statusCode,
-    body: JSON.stringify(fulfillmentText),
-    headers: {
-      "Access-Control-Allow-Credentials": true,
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json"
-    }
-  };
-};
+import 'source-map-support/register';
 
 import HelloWorld from './lib/helloWorld';
 import { saveItem, getItems } from './actions';
-type Item = {
-  code: string,
-  name: string
+
+export const response = (fulfillmentText: any, statusCode: number): any => ({
+  statusCode,
+  body: JSON.stringify(fulfillmentText),
+  headers: {
+    'Access-Control-Allow-Credentials': true,
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json'
+  }
+});
+
+interface IItem {
+  code: string;
+  name: string;
 }
-// tslint:disable-next-line:variable-name
+
 export const hello = (event, _context, callback): void => {
   const hellowWorld = new HelloWorld();
 
@@ -50,7 +50,7 @@ export const hi = (_event, _context, callback): void => {
 };
 
 export const createChannel: Handler = async (event: APIGatewayEvent) => {
-  const incoming: { item: Item } = JSON.parse(event.body);
+  const incoming: { item: IItem } = JSON.parse(event.body);
   const { item } = incoming;
 
   try {
@@ -58,23 +58,15 @@ export const createChannel: Handler = async (event: APIGatewayEvent) => {
 
     return response({ created: incoming }, CREATED);
   } catch (error) {
-    console.error(error);
-    // return respond(err, 400);
+    return response({ error }, 400);
   }
 };
 
 export const getChannels: Handler = async () => {
-  // event: APIGatewayEvent
-  // const incoming: { item: Item } = JSON.parse(event.body);
-  // const { item } = incoming;
-
   try {
-    const data = await getItems();
-    // console.log('data', data);
-
+    const data: IItem[] = await getItems();
     return response(data, OK);
   } catch (error) {
-    console.error(error);
-    // return respond(err, 400);
+    return response({ error }, 400);
   }
 };
