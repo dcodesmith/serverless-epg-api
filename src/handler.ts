@@ -50,13 +50,12 @@ export const hi = (_event, _context, callback): void => {
 };
 
 export const createChannel: Handler = async (event: APIGatewayEvent) => {
-  const incoming: { item: IItem } = JSON.parse(event.body);
-  const { item } = incoming;
+  const item: IItem = JSON.parse(event.body);
 
   try {
     await saveItem(item);
 
-    return response({ created: incoming }, CREATED);
+    return response({ created: item }, CREATED);
   } catch (error) {
     return response({ error }, 400);
   }
