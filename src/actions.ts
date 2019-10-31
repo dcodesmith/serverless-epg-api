@@ -1,5 +1,6 @@
 import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
+import { IChannel, IProgramme } from './interface';
 
 let options = {};
 
@@ -13,14 +14,9 @@ if (process.env.IS_OFFLINE) {
   };
 }
 
-interface IItem {
-  code: string;
-  name: string;
-}
-
 const dynamoDB = new AWS.DynamoDB.DocumentClient(options);
 
-export const saveItem = async (item: IItem) => {
+export const saveItem = async (item: IChannel): Promise<any> => {
   const id: string = uuid();
 
   const params = {
@@ -38,7 +34,23 @@ export const saveItem = async (item: IItem) => {
     .catch(error => error);
 };
 
-export const getItem = async (id: string) => {
+export const saveItems = async (items: IProgramme[]): Promise<any> => {
+  const params = {
+    RequestItems: {
+      [process.env.DYNAMODB_TABLE]: items.map(item => ({
+        PutRequest: { Item: item }
+      }))
+    }
+  };
+
+  return dynamoDB
+    .batchWrite(params)
+    .promise()
+    .then(response => response)
+    .catch(error => error);
+};
+
+export const getItem = async (id: string): Promise<any> => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
@@ -53,7 +65,7 @@ export const getItem = async (id: string) => {
     .catch(error => error);
 };
 
-export const getItems = async () => {
+export const getItems = async (): Promise<any> => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE
   };
