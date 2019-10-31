@@ -1,9 +1,9 @@
 import { APIGatewayEvent, Handler } from 'aws-lambda';
 import {
   OK,
-  CREATED
+  CREATED,
+  BAD_REQUEST
   // NOT_FOUND,
-  // BAD_REQUEST,
   // NO_CONTENT
 } from 'http-status';
 
@@ -12,7 +12,8 @@ import {
 import 'source-map-support/register';
 
 import HelloWorld from './lib/helloWorld';
-import { saveItem, getItems } from './actions';
+import { IChannel, IProgramme } from './interface';
+import { saveItem, saveItems, getItems } from './actions';
 
 export const response = (fulfillmentText: any, statusCode: number): any => ({
   statusCode,
@@ -23,11 +24,6 @@ export const response = (fulfillmentText: any, statusCode: number): any => ({
     'Content-Type': 'application/json'
   }
 });
-
-interface IItem {
-  code: string;
-  name: string;
-}
 
 export const hello = (event, _context, callback): void => {
   const hellowWorld = new HelloWorld();
@@ -50,22 +46,35 @@ export const hi = (_event, _context, callback): void => {
 };
 
 export const createChannel: Handler = async (event: APIGatewayEvent) => {
-  const item: IItem = JSON.parse(event.body);
+  const item: IChannel = JSON.parse(event.body);
 
   try {
     await saveItem(item);
 
     return response({ created: item }, CREATED);
   } catch (error) {
-    return response({ error }, 400);
+    return response({ error }, BAD_REQUEST);
   }
 };
 
 export const getChannels: Handler = async () => {
   try {
-    const data: IItem[] = await getItems();
+    const data: IChannel[] = await getItems();
+
     return response(data, OK);
   } catch (error) {
-    return response({ error }, 400);
+    return response({ error }, BAD_REQUEST);
+  }
+};
+
+export const createProgrammes: Handler = async (event: APIGatewayEvent) => {
+  const items: IProgramme[] = JSON.parse(event.body);
+
+  try {
+    await saveItems(items);
+
+    return response({ created: items }, CREATED);
+  } catch (error) {
+    return response({ error }, BAD_REQUEST);
   }
 };

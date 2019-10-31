@@ -63,6 +63,13 @@ functions:
           method: post
           path: create-channel
           cors: true
+  create-programmes:
+    handler: src/handler.createProgrammes
+    events:
+      - http:
+          method: post
+          path: create-programmes
+          cors: true
   channels:
     handler: src/handler.getChannels
     events:
