@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-import { IChannel, IProgramme } from './interface';
+import { Channel, Programme } from './types';
 
 let options = {};
 
@@ -16,7 +16,7 @@ if (process.env.IS_OFFLINE) {
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient(options);
 
-export const saveItem = async (item: IChannel): Promise<any> => {
+export const saveItem = async (item: Channel): Promise<any> => {
   const id: string = uuid();
 
   const params = {
@@ -30,24 +30,30 @@ export const saveItem = async (item: IChannel): Promise<any> => {
   return dynamoDB
     .put(params)
     .promise()
-    .then(response => response)
-    .catch(error => error);
+    .then((response) => response)
+    .catch((error) => error);
 };
 
-export const saveItems = async (items: IProgramme[]): Promise<any> => {
+export const saveItems = async (items: Programme[]): Promise<any> => {
   const params = {
     RequestItems: {
-      [process.env.DYNAMODB_TABLE]: items.map(item => ({
-        PutRequest: { Item: item }
-      }))
+      [process.env.DYNAMODB_TABLE]: items.map((item) => {
+        const id = uuid();
+        // item.id = id;
+        return { PutRequest: { Item: { id, ...item } } };
+      })
     }
   };
 
-  return dynamoDB
-    .batchWrite(params)
-    .promise()
-    .then(response => response)
-    .catch(error => error);
+  return dynamoDB.batchWrite(params).promise();
+  // .then(response => {
+  //   console.log('response')
+  //   console.log(response)
+  // })
+  // .catch(error => {
+  //   console.log('error')
+  //   console.log(error)
+  // });
 };
 
 export const getItem = async (id: string): Promise<any> => {
@@ -62,7 +68,7 @@ export const getItem = async (id: string): Promise<any> => {
     .get(params)
     .promise()
     .then(({ Item }) => Item)
-    .catch(error => error);
+    .catch((error) => error);
 };
 
 export const getItems = async (): Promise<any> => {
@@ -73,6 +79,6 @@ export const getItems = async (): Promise<any> => {
   return dynamoDB
     .scan(params)
     .promise()
-    .then(response => response)
-    .catch(error => error);
+    .then((response) => response)
+    .catch((error) => error);
 };
