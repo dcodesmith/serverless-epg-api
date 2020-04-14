@@ -1,4 +1,4 @@
-export default interface IProgramme {
+export type Programme = {
   channel: string;
   show: string;
   type: string;
@@ -12,4 +12,9 @@ export default interface IProgramme {
   numberOfEpisodes: number;
   genre: string;
   frequency: string;
-}
+};
+
+export type Channel = {
+  code: string;
+  name: string;
+};
