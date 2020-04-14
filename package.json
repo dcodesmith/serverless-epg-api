@@ -9,7 +9,7 @@
     "lint": "tslint -c ./tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
-    "aws-lambda": "^0.1.2",
+    "aws-lambda": "^1.0.5",
     "aws-sdk": "^2.521.0",
     "dynamodb-localhost": "0.0.7",
     "http-status": "^1.3.2",
