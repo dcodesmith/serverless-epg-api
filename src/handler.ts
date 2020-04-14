@@ -7,12 +7,11 @@ import {
   // NO_CONTENT
 } from 'http-status';
 
-// tslint:disable variable-name no-shadowed-variable no-submodule-imports
-
 import 'source-map-support/register';
 
 import HelloWorld from './lib/helloWorld';
-import { IChannel, IProgramme } from './interface';
+import { Channel, Programme } from './types';
+
 import { saveItem, saveItems, getItems } from './actions';
 
 export const response = (fulfillmentText: any, statusCode: number): any => ({
@@ -46,7 +45,7 @@ export const hi = (_event, _context, callback): void => {
 };
 
 export const createChannel: Handler = async (event: APIGatewayEvent) => {
-  const item: IChannel = JSON.parse(event.body);
+  const item: Channel = JSON.parse(event.body);
 
   try {
     await saveItem(item);
@@ -59,7 +58,7 @@ export const createChannel: Handler = async (event: APIGatewayEvent) => {
 
 export const getChannels: Handler = async () => {
   try {
-    const data: IChannel[] = await getItems();
+    const data: Channel[] = await getItems();
 
     return response(data, OK);
   } catch (error) {
@@ -68,7 +67,7 @@ export const getChannels: Handler = async () => {
 };
 
 export const createProgrammes: Handler = async (event: APIGatewayEvent) => {
-  const items: IProgramme[] = JSON.parse(event.body);
+  const items: Programme[] = JSON.parse(event.body);
 
   try {
     await saveItems(items);
